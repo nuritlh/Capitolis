@@ -11,7 +11,6 @@ router.get('/', function (req, res, next) {
 router.post('/add', function (req, res, next) {
   try {
     const transactions = addNewTransaction(req.body.transaction)
-    console.log('add', transactions)
     res.json(transactions)
   } catch (error) {
     res.status(500).send(StatusCodes.BAD_REQUEST)
