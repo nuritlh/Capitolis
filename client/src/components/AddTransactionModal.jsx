@@ -35,10 +35,12 @@ const useStyles = makeStyles((theme) => ({
 export const AddTransactionModal = ({ transactions }) => {
   const classes = useStyles()
   // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle)
-  const [open, setOpen] = React.useState(false)
+  const [modalStyle] = useState(getModalStyle)
+  const [open, setOpen] = useState(false)
   const [amount, setAmount] = useState(0)
   const [name, setName] = useState('')
+  const [amountError, setAmountError] = useState(false)
+  const [nameError, setNameError] = useState(false)
 
   const handleOpen = () => {
     setOpen(true)
@@ -48,18 +50,50 @@ export const AddTransactionModal = ({ transactions }) => {
     setOpen(false)
   }
 
+  const onChangeAmount = (value) => {
+    setAmountError(false)
+    if (value !== '' && value !== '0') {
+      setAmount(parseInt(value))
+    } else {
+      setAmountError(true)
+    }
+  }
+
+  const onChangeName = (value) => {
+    setNameError(false)
+    if (value !== '') {
+      setName(value)
+    } else {
+      setNameError(true)
+    }
+  }
+
   const add = async () => {
-    const result = await addTransaction({ name, amount })
-    transactions(result)
-    handleClose()
+    if (amount !== 0 && name !== '') {
+      const result = await addTransaction({ name, amount })
+      transactions(result)
+      handleClose()
+    }
   }
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <h2 id="simple-modal-title">Add New Transaction</h2>
       <div className={inputs}>
-        <Input label="amount" onChange={(amount) => setAmount(amount)} />
-        <Input label="Counterparty" onChange={(name) => setName(name)} />
+        <Input
+          label="amount"
+          onChange={onChangeAmount}
+          error={amountError}
+          helperText="The amount must be non-zero"
+          type="number"
+        />
+        <Input
+          label="Counterparty"
+          onChange={onChangeName}
+          error={nameError}
+          helperText="Please fill in name"
+          type="text"
+        />
       </div>
       <Button variant="outlined" color="primary" onClick={add}>
         Add

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const Input = ({ label, onChange }) => {
+export const Input = ({ label, onChange, type, error, helperText }) => {
   const classes = useStyles()
 
   const handelOnChange = (e) => {
@@ -24,10 +24,13 @@ export const Input = ({ label, onChange }) => {
         <TextField
           label={label}
           id="outlined-size-small"
-          defaultValue={0}
           variant="outlined"
           size="small"
           onChange={handelOnChange}
+          type={type}
+          error={error}
+          helperText={helperText}
+          required
         />
       </div>
     </form>
