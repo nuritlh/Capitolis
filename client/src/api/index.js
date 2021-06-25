@@ -7,7 +7,9 @@ export const fetchTransactions = async () => {
   return results.data
 }
 
-export const fetchUsers = async () => {
-  const results = await axios(`${baseUrl}/users`)
+export const addTransaction = async (transaction) => {
+  const results = await axios.post(`${baseUrl}/transactions/add`, {
+    transaction,
+  })
   return results.data
 }

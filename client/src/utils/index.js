@@ -1,23 +1,10 @@
-export const fullTransactionsDetails = (transactions, users) => {
-  const fullTransactions = transactions.map(
-    ({ id, tradingParty, counterparty, amount }) => {
-      const pays = users.find(({ id: userId }) => userId === tradingParty)
-      const receives = users.find(({ id: userId }) => userId === counterparty)
-      return {
-        id,
-        pays,
-        receives,
-        amount,
-      }
-    },
-  )
-
-  const payingTransactions = fullTransactions
+export const splitTransactions = (transactions) => {
+  const payingTransactions = transactions
     .filter(({ amount }) => amount < 0)
-    .map(({ id, pays, amount }) => ({ id, user: pays, amount }))
-  const receivingTransactions = fullTransactions
+    .map(({ id, tradingParty, amount }) => ({ id, name: tradingParty, amount }))
+  const receivingTransactions = transactions
     .filter(({ amount }) => amount > 0)
-    .map(({ id, receives, amount }) => ({ id, user: receives, amount }))
+    .map(({ id, counterparty, amount }) => ({ id, name: counterparty, amount }))
 
   return { payingTransactions, receivingTransactions }
 }

@@ -7,7 +7,6 @@ const cors = require('cors')
 
 const indexRouter = require('./routes/index')
 const transactionsRouter = require('./routes/transactions')
-const usersRouter = require('./routes/users')
 const testAPIRouter = require('./routes/testAPI')
 
 const app = express()
@@ -25,7 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/transactions', transactionsRouter)
-app.use('/users', usersRouter)
 app.use('/testAPI', testAPIRouter)
 
 // catch 404 and forward to error handler
