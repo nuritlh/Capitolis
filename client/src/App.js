@@ -1,35 +1,68 @@
+import { css } from '@emotion/css'
 import React, { useEffect, useState } from 'react'
-import './App.css'
-import logo from './logo.svg'
+import { fetchTransactions, fetchUsers } from './api'
+import { AddTransactionModal } from './components/AddTransactionModal.tsx'
+import { TransactionBox } from './components/TransactionBox'
+import { fullTransactionsDetails } from './utils'
 
 function App() {
-  const [apiResponse, setApiResponse] = useState()
+  const [payingTransactions, setPayingTransactions] = useState([])
+  const [receivingTransactions, setReceivingTransactions] = useState([])
 
   useEffect(() => {
-    fetch('http://localhost:9000/testAPI')
-      .then((res) => res.text())
-      .then((res) => setApiResponse(res))
-  })
+    const fetchData = async () => {
+      const transactions = await fetchTransactions()
+      const users = await fetchUsers()
+
+      const { payingTransactions, receivingTransactions } =
+        fullTransactionsDetails(transactions, users)
+      setPayingTransactions(payingTransactions)
+      setReceivingTransactions(receivingTransactions)
+    }
+    fetchData()
+  }, [])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p className="App-intro">{apiResponse}</p>
-      </header>
+    <div className={container}>
+      <div className={transactions}>
+        <div>
+          <h2>Paying</h2>
+          {payingTransactions && (
+            <TransactionBox transactions={payingTransactions} />
+          )}
+        </div>
+        <div>
+          <h2>Receiving</h2>
+          {receivingTransactions && (
+            <TransactionBox transactions={receivingTransactions} />
+          )}
+        </div>
+      </div>
+      <div className={buttons}>
+        <AddTransactionModal />
+        <button>Compress Transactions</button>
+      </div>
     </div>
   )
 }
 
 export default App
+
+const container = css`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`
+
+const transactions = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`
+
+const buttons = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 2rem;
+`
