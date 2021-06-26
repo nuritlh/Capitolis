@@ -4,15 +4,23 @@ const { transactions, addNewTransaction } = require('./utils')
 
 /* GET transactions. */
 router.get('/', function (req, res, next) {
-  res.json(transactions)
+  try {
+    console.log('GET - request to get app transactions')
+    res.json(transactions)
+  } catch (error) {
+    console.log('Failed to get transactions')
+    res.status(500).send(StatusCodes.BAD_REQUEST)
+  }
 })
 
 /* POST add transactions. */
 router.post('/add', function (req, res, next) {
+  console.log('POST - request to add new transaction')
   try {
     const transactions = addNewTransaction(req.body.transaction)
     res.json(transactions)
   } catch (error) {
+    console.log('Failed to add new transaction')
     res.status(500).send(StatusCodes.BAD_REQUEST)
   }
 })
