@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { transactions, addNewTransaction } = require('./utils')
+const { readFromFile, addNewTransaction } = require('./utils')
 
 /* GET transactions. */
 router.get('/', function (req, res, next) {
   try {
-    console.log('GET - request to get app transactions')
+    let transactions = readFromFile()
+    console.log('GET - request to get transactions')
     res.json(transactions)
   } catch (error) {
     console.log('Failed to get transactions')

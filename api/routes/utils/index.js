@@ -1,21 +1,31 @@
-const transactions = [
-  { id: 1, tradingParty: 'Nurit', counterparty: 'Naor', amount: -400 },
-  { id: 2, tradingParty: 'Nurit', counterparty: 'Naor', amount: 500 },
-  { id: 3, tradingParty: 'Naor', counterparty: 'Ira', amount: 100 },
-  { id: 4, tradingParty: 'Nurit', counterparty: 'Ira', amount: 100 },
-  { id: 5, tradingParty: 'Ira', counterparty: 'Nurit', amount: -100 },
-  { id: 6, tradingParty: 'Naor', counterparty: 'Nurit', amount: -200 },
-]
+const fs = require('fs')
 
 const addNewTransaction = (transaction) => {
-  const newTransaction = {
-    id: transactions.length + 1,
-    tradingParty: 'Nurit',
-    counterparty: transaction.name,
-    amount: transaction.amount,
-  }
-  transactions.push(newTransaction)
-  return transactions
+  try {
+    const transactions = readFromFile()
+    const newTransaction = {
+      id: transactions.length + 1,
+      tradingParty: 'Nurit',
+      counterparty: transaction.name,
+      amount: transaction.amount,
+    }
+    transactions.push(newTransaction)
+    writeToFile(transactions)
+    return transactions
+  } catch (error) {}
 }
 
-module.exports = { transactions, addNewTransaction }
+const readFromFile = () => {
+  let rawdata = fs.readFileSync('transactions.json')
+  return JSON.parse(rawdata)
+}
+
+const writeToFile = (newFile) => {
+  let data = JSON.stringify(newFile, null, 2)
+  fs.writeFile('transactions.json', data, (err) => {
+    if (err) throw err
+    console.log('Data written to file')
+  })
+}
+
+module.exports = { readFromFile, addNewTransaction }
