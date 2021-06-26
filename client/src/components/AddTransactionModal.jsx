@@ -17,7 +17,7 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    width: 600,
+    width: 500,
     backgroundColor: theme.palette.background.paper,
     borderRadius: '2rem',
     boxShadow: theme.shadows[5],
@@ -77,7 +77,9 @@ export const AddTransactionModal = ({ transactions }) => {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Add New Transaction</h2>
+      <h2 id="simple-modal-title" className={title}>
+        Add New Transaction
+      </h2>
       <div className={inputs}>
         <Input
           label="amount"
@@ -124,4 +126,8 @@ export const AddTransactionModal = ({ transactions }) => {
 
 const inputs = css`
   display: flex;
+`
+
+const title = css`
+  color: rgb(63, 81, 181);
 `

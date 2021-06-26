@@ -81,7 +81,11 @@ export default App
 const container = css`
   display: flex;
   flex-direction: column;
-  text-align: center;
+  max-width: 50rem;
+  margin: 1rem auto;
+  border-radius: 2rem;
+  padding: 4rem;
+  box-shadow: 0 0.25rem 1rem -0.25rem rgba(63, 81, 181, 0.16);
 `
 
 const header = css`
