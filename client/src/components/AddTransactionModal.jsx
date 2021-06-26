@@ -37,8 +37,8 @@ export const AddTransactionModal = ({ transactions }) => {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
-  const [amount, setAmount] = useState(0)
-  const [name, setName] = useState('')
+  const [amount, setAmount] = useState(null)
+  const [name, setName] = useState(null)
   const [amountError, setAmountError] = useState(false)
   const [nameError, setNameError] = useState(false)
 
@@ -47,6 +47,10 @@ export const AddTransactionModal = ({ transactions }) => {
   }
 
   const handleClose = () => {
+    setAmount(null)
+    setName(null)
+    setNameError(false)
+    setAmountError(false)
     setOpen(false)
   }
 
@@ -69,11 +73,14 @@ export const AddTransactionModal = ({ transactions }) => {
   }
 
   const add = async () => {
-    if (amount !== 0 && name !== '') {
+    if (amount !== null && name !== null) {
       const result = await addTransaction({ name, amount })
       transactions(result)
       handleClose()
+      return
     }
+    if (amount === null) setAmountError(true)
+    if (name === null) setNameError(true)
   }
 
   const body = (
@@ -103,9 +110,14 @@ export const AddTransactionModal = ({ transactions }) => {
 
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
+      <Button
+        type="button"
+        color="primary"
+        variant="contained"
+        onClick={handleOpen}
+      >
         Add New Transactions
-      </button>
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

@@ -1,4 +1,5 @@
 import { css } from '@emotion/css'
+import Button from '@material-ui/core/Button'
 import React, { useEffect, useState } from 'react'
 import { fetchTransactions } from './api'
 import { AddTransactionModal } from './components/AddTransactionModal'
@@ -33,16 +34,18 @@ function App() {
 
   return (
     <div className={container}>
+      <div className={header}>
+        <h2>Paying</h2>
+        <h2>Receiving</h2>
+      </div>
       {transactions ? (
         <div className={transactionsStyle}>
           <div>
-            <h2>Paying</h2>
             {payingTransactions && (
               <TransactionBox transactions={payingTransactions} />
             )}
           </div>
           <div>
-            <h2>Receiving</h2>
             {receivingTransactions && (
               <TransactionBox transactions={receivingTransactions} />
             )}
@@ -53,7 +56,9 @@ function App() {
       )}
       <div className={buttons}>
         <AddTransactionModal transactions={addTransaction} />
-        <button>Compress Transactions</button>
+        <Button variant="contained" color="primary">
+          Compress Transactions
+        </Button>
       </div>
     </div>
   )
@@ -67,9 +72,14 @@ const container = css`
   text-align: center;
 `
 
+const header = css`
+  display: flex;
+  text-align: center;
+  justify-content: space-around;
+`
+
 const transactionsStyle = css`
   display: flex;
-  align-items: center;
   justify-content: space-around;
 `
 
