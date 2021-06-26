@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { fetchTransactions } from './api'
 import { AddTransactionModal } from './components/AddTransactionModal'
 import { TransactionBox } from './components/TransactionBox'
-import { splitTransactions } from './utils'
+import { convertToSCV, splitTransactions } from './utils'
 
 function App() {
   const [transactions, setTransactions] = useState([])
   const [payingTransactions, setPayingTransactions] = useState([])
   const [receivingTransactions, setReceivingTransactions] = useState([])
+  const [csvLink, setCsvLink] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +31,10 @@ function App() {
   const addTransaction = async (transactions) => {
     setTransactions(transactions)
     setData(transactions)
+  }
+
+  const downloadCSV = () => {
+    setCsvLink(convertToSCV(transactions))
   }
 
   return (
@@ -56,8 +61,10 @@ function App() {
       )}
       <div className={buttons}>
         <AddTransactionModal transactions={addTransaction} />
-        <Button variant="contained" color="primary">
-          Compress Transactions
+        <Button variant="contained" color="primary" onClick={downloadCSV}>
+          <a href={csvLink} className={link}>
+            Compress Transactions
+          </a>
         </Button>
       </div>
     </div>
@@ -89,4 +96,9 @@ const buttons = css`
   align-items: center;
   justify-content: space-around;
   margin-top: 2rem;
+`
+
+const link = css`
+  text-decoration: none;
+  color: white;
 `
