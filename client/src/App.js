@@ -76,6 +76,7 @@ const header = css`
   display: flex;
   text-align: center;
   justify-content: space-around;
+  color: rgb(63, 81, 181);
 `
 
 const transactionsStyle = css`
