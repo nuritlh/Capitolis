@@ -4,7 +4,7 @@ const transactions = [
   { id: 3, tradingParty: 'Naor', counterparty: 'Ira', amount: 100 },
   { id: 4, tradingParty: 'Nurit', counterparty: 'Ira', amount: 100 },
   { id: 5, tradingParty: 'Ira', counterparty: 'Nurit', amount: -100 },
-  { id: 6, tradingParty: 'Naor', counterparty: 'Nurit', amount: -100 },
+  { id: 6, tradingParty: 'Naor', counterparty: 'Nurit', amount: -200 },
 ]
 
 const addNewTransaction = (transaction) => {

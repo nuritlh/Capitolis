@@ -1,3 +1,4 @@
+import { isEqual, uniqWith } from 'lodash'
 export const splitTransactions = (transactions) => {
   const payingTransactions = transactions
     .filter(({ amount }) => amount < 0)
@@ -20,12 +21,41 @@ export const convertToSCV = (transactions) => {
     ]),
   ]
 
-  console.log(csvString)
   let csvContent =
     'data:text/csv;charset=utf-8,' +
     csvString.map((e) => e.join(',')).join('\n')
-  console.log(csvContent)
   const encodedUri = encodeURI(csvContent)
-  console.log(encodedUri)
   return encodedUri
+}
+
+export const compress = (transactions) => {
+  const pairs = uniqWith(
+    transactions.map(({ tradingParty, counterparty }) => {
+      const key = [tradingParty, counterparty]
+      key.sort()
+      return key
+    }),
+    isEqual,
+  )
+
+  const compress = pairs.map(([personA, personB]) => [
+    [personA, personB],
+    transactions.reduce((acc, { amount, tradingParty, counterparty }) => {
+      if (tradingParty === personA && counterparty === personB) {
+        acc += amount
+      } else if (tradingParty === personB && counterparty === personA) {
+        acc -= amount
+      }
+
+      return acc
+    }, 0),
+  ])
+
+  const a = compress.map((transaction, idx) => ({
+    id: idx + 1,
+    tradingParty: transaction[0][0],
+    counterparty: transaction[0][1],
+    amount: transaction[1],
+  }))
+  return a
 }

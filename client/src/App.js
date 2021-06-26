@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchTransactions } from './api'
 import { AddTransactionModal } from './components/AddTransactionModal'
 import { TransactionBox } from './components/TransactionBox'
-import { convertToSCV, splitTransactions } from './utils'
+import { compress, convertToSCV, splitTransactions } from './utils'
 
 function App() {
   const [transactions, setTransactions] = useState([])
@@ -33,8 +33,9 @@ function App() {
     setData(transactions)
   }
 
-  const downloadCSV = () => {
-    setCsvLink(convertToSCV(transactions))
+  const compressAndDownloadCSV = () => {
+    const compressTransactions = compress(transactions)
+    setCsvLink(convertToSCV(compressTransactions))
   }
 
   return (
@@ -61,7 +62,11 @@ function App() {
       )}
       <div className={buttons}>
         <AddTransactionModal transactions={addTransaction} />
-        <Button variant="contained" color="primary" onClick={downloadCSV}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={compressAndDownloadCSV}
+        >
           <a href={csvLink} className={link}>
             Compress Transactions
           </a>
